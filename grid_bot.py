@@ -1,5 +1,5 @@
 """
-Спотовый грид-бот для торговли в Тинькофф Инвестициях
+Спотовый грид-бот для торговли в Т-Инвестиции
 Этот бот реализует стратегию сеточной торговли (grid trading) на спотовом рынке.
 
 Стратегия:
@@ -9,8 +9,8 @@
 - Получает прибыль от колебаний цены в боковике
 
 Для запуска необходимо:
-1. Получить токен в личном кабинете Тинькофф Инвестиций
-2. Установить токен в переменную окружения TINKOFF_TOKEN
+1. Получить токен в личном кабинете Т-Инвестиции
+2. Установить токен в переменную окружения T_INVEST_TOKEN
 3. Настроить параметры бота в конфигурации
 """
 
@@ -23,13 +23,19 @@ from typing import Optional, List, Dict
 from dataclasses import dataclass, field
 import json
 
-from tinkoff.investments import TinkoffInvestmentsRESTClient, Environment, CandleResolution
-from tinkoff.investments.api.user import UserAPI
-from tinkoff.investments.api.market import MarketCandlesAPI, MarketOrderBooksAPI
-from tinkoff.investments.api.orders import OrdersAPI
-from tinkoff.investments.api.portfolio import PortfolioAPI
-from tinkoff.investments.model.operations import OperationType as ModelOperationType
-from tinkoff.investments.model.orders import Order, PlacedLimitOrder
+from t_tech.invest import AsyncClient
+from t_tech.invest.schemas import (
+    CandleInterval, 
+    OrderDirection, 
+    OrderType, 
+    Quotation,
+    GetCandlesResponse,
+    GetOrderBookResponse,
+    PostOrderResponse,
+    PortfolioResponse,
+    GetAccountsResponse
+)
+from t_tech.invest.utils import quotation_to_float
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import pandas as pd
